@@ -1,14 +1,21 @@
+import { Inter } from 'next/font/google'
 import './globals.css'
 
+const inter = Inter({
+  subsets: ['latin'],
+  display: 'swap',
+})
+
 export const metadata = {
-  title: 'Customers',
+  title: 'Happenix · Customers',
+  description: 'Manage and import customer data',
 }
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="en" className={inter.className}>
       <body>
-        <main style={{ padding: 24, fontFamily: 'system-ui, sans-serif' }}>{children}</main>
+        <main>{children}</main>
       </body>
     </html>
   )
