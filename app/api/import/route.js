@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { getDB } from '../../../../lib/mongodb'
+import { getDB } from '../../../lib/mongodb'
 
 export async function POST() {
   try {
@@ -11,6 +11,7 @@ export async function POST() {
     const col = db.collection('customers')
 
     let inserted = 0
+    let skipped = 0
     for (const u of users) {
       const doc = {
         name: u.name || u.username || '',
@@ -22,9 +23,10 @@ export async function POST() {
 
       const result = await col.updateOne({ email: doc.email }, { $setOnInsert: doc }, { upsert: true })
       if (result.upsertedId) inserted++
+      else skipped++
     }
 
-    return NextResponse.json({ imported: inserted, total: users.length })
+    return NextResponse.json({ imported: inserted, skipped, total: users.length })
   } catch (err) {
     return NextResponse.json({ error: String(err) }, { status: 500 })
   }
